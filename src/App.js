@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import Navbar from './Navbar';
+import Home from './Home';
+import Product from './Product';
+import ErrorFetch from './ErrorFetch';
+import Burger from './Burger';
+import Sandwitch from './Sandwitch';
+import React from 'react';
+import ProductDetails from './ProductDetails';
+
+const LazyAbout = React.lazy(() => import("./About"));
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar/>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/product' element={<Product/>}>
+          <Route index element={<Burger/>}/>
+          <Route path='burger' element={<Burger/>}/>
+          <Route path='sandwitch' element={<Sandwitch/>}/>
+        </Route>
+        <Route path='/product/:name' element={<ProductDetails/>}>
+          <Route index element={<ProductDetails/>}/>
+          <Route path=":price" element={<ProductDetails/>}/>
+        </Route>
+        <Route path='/about' element={<React.Suspense fallback="Loading..."><LazyAbout/></React.Suspense>}/>
+        <Route path='*' element={<ErrorFetch/>}/>
+      </Routes>
     </div>
   );
 }
